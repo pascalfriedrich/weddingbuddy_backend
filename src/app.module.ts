@@ -9,7 +9,7 @@ import configuration from './config/configuration';
   imports: [
     PhotosModule,
     ConfigModule.forRoot({
-      envFilePath: `${process.cwd()}/config/env/.env.${process.env.NODE_ENV}`,
+      envFilePath: `${process.cwd()}/src/config/env/.env.${process.env.NODE_ENV}`,
       isGlobal: true,
       load: [configuration],
     }),

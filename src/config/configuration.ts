@@ -5,6 +5,7 @@ export default () => ({
       key: process.env.DO_SPACES_KEY,
       secret: process.env.DO_SPACES_SECRET,
       bucket: process.env.DO_SPACES_BUCKET,
+      endpoint: process.env.DO_SPACES_ENDPOINT,
     },
   },
   database: {

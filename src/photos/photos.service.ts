@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
-import * as fs from 'fs';
-import * as path from 'path';
 
 @Injectable()
 export class PhotosService {
   private s3: AWS.S3;
 
-  constructor() {
-    const spacesEndpoint = new AWS.Endpoint('nyc3.digitaloceanspaces.com');
+  constructor(private configService: ConfigService) {
+    const spacesEndpoint = new AWS.Endpoint(
+      this.configService.get<string>('digitalOcean.spaces.endpoint'),
+    );
     this.s3 = new AWS.S3({
       endpoint: spacesEndpoint,
       accessKeyId: process.env.DO_SPACES_KEY,
@@ -17,10 +18,10 @@ export class PhotosService {
   }
 
   async uploadImage(file: Express.Multer.File): Promise<string> {
-    const fileContent = fs.readFileSync(file.path);
+    const fileContent = file.buffer;
     const params = {
-      Bucket: process.env.DO_SPACES_BUCKET,
-      Key: path.basename(file.path),
+      Bucket: this.configService.get<string>('digitalOcean.spaces.bucket'),
+      Key: file.originalname,
       Body: fileContent,
       ACL: 'public-read',
     };
